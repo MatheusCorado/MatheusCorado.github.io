@@ -1,0 +1,38 @@
+.Contato {
+  background: #000;
+  color: #fff;
+}
+.Contato-conteiner {
+  max-width: 1200px;
+  padding: 120px 20px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+}
+.Contato-conteiner p {
+  font-size: 1.5rem;
+  color: #ccc;
+  line-height: 1.33;
+  max-width: 35ch;
+  margin-top: 60px;
+}
+
+.Contato-lista {
+  font-size: 2.25rem;
+  font-weight: bold;
+  line-height: 1.6;
+}
+.Contato-lista li {
+  margin-bottom: 30px;
+}
+.Direitos {
+  font-size: 1.125;
+  color: #8f8f8f;
+}
+
+@media (max-width: 800px) {
+  .Contato-conteiner {
+    grid-template-columns: 1fr;
+  }
+}
