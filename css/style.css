@@ -1,0 +1,23 @@
+@import url(./global/global.css);
+@import url(./global/header.css);
+@import url(./global/footer.css);
+
+@import url(./home/introducao.css);
+@import url(./home/escolha.css);
+@import url(./home/tecnologias.css);
+@import url(./home/parceiros.css);
+@import url(./home/depoimento.css);
+@import url(./home/seguros-home.css);
+
+@import url(./bicicletas/bicicletas-header.css);
+@import url(./bicicletas/bicicletas-lista.css);
+@import url(./bicicletas/sobre-bicicleta.css);
+@import url(./bicicletas/seguro-bicicletas.css);
+
+@import url(./seguros/seguros.css);
+@import url(./seguros/seguro-vantagens.css);
+@import url(./seguros/perguntas.css);
+
+@import url(./utilidades/componentes.css);
+@import url(./utilidades/tipografia.css);
+@import url(./utilidades/cores.css);

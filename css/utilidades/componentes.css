@@ -1,0 +1,51 @@
+.botao {
+  color: var(--p5);
+  display: block;
+  background-image: linear-gradient(#ffbf00, #f2a50c);
+  padding: 16px 32px;
+  font-size: 18px;
+  border-radius: 5px;
+  font-family: Poppins;
+  font-weight: 600;
+  place-self: start;
+}
+.botao:hover {
+  background-image: linear-gradient(#ffb60d, #e59317);
+}
+.seguro-botao {
+  display: block;
+  background: var(--c10);
+  color: var(--c4);
+  padding: 16px 32px;
+  font-size: 18px;
+  border-radius: 5px;
+  font-family: Poppins;
+  font-weight: 600;
+  place-self: start;
+}
+.seguro-botao:hover {
+  background: var(--c9);
+}
+@media (max-width: 1200px) {
+  .botao {
+    font-size: 16px;
+  }
+}
+@media (max-width: 800px) {
+  .botao,
+  .seguro-botao {
+    padding: 12px 18px;
+    font-size: 16px;
+  }
+}
+.detalhe {
+  color: var(--p1);
+}
+@media (max-width: 600px) {
+  .seguros-item .botao {
+    grid-column: 1/-1;
+  }
+  .seguros-item .seguro-botao {
+    grid-column: 1/-1;
+  }
+}
