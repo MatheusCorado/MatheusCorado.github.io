@@ -1,6 +1,6 @@
 .contato-bg {
   background: var(--c11);
-  box-shadow: inset 0px -260px var(--c1);
+  box-shadow: inset 0px -360px var(--c1);
 }
 .contato-header {
   max-width: 1200px;
@@ -73,4 +73,29 @@
 
 .form-botao {
   border: none;
+}
+@media (max-width: 800px) {
+  .contato {
+    grid-template-columns: 1fr;
+  }
+  .contato-bg {
+    box-shadow: inset 0px -660px var(--c1);
+  }
+  .contato-info,
+  .contato-form {
+    padding: 30px;
+  }
+}
+@media (max-width: 600px) {
+  .contato-bg {
+    box-shadow: inset 0px -760px var(--c1);
+  }
+  .form-telefone,
+  .form-nome,
+  .form-botao {
+    grid-column: 1/-1;
+  }
+  .contato-info h3 {
+    padding-bottom: 32px;
+  }
 }
