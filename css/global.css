@@ -1,0 +1,197 @@
+:root {
+  --c12: #000000;
+  --c11: #111111;
+  --c10: #2e2e2e;
+  --c9: #404040;
+  --c8: #595959;
+  --c7: #717171;
+  --c6: #9c9c9c;
+  --c5: #b2b2b2;
+  --c4: #cccccc;
+  --c3: #dedede;
+  --c2: #ededed;
+  --c1: #f7f7f7;
+  --w: #ffffff;
+  --p2: #330000;
+  --p1: #fe0000;
+  --tamanho: 160px;
+}
+.cor-12 {
+  color: var(--c12);
+}
+.cor-11 {
+  color: var(--c11);
+}
+.cor-10 {
+  color: var(--c10);
+}
+.cor-9 {
+  color: var(--c9);
+}
+.cor-8 {
+  color: var(--c8);
+}
+.cor-7 {
+  color: var(--c7);
+}
+.cor-6 {
+  color: var(--c6);
+}
+.cor-5 {
+  color: var(--c5);
+}
+.cor-4 {
+  color: var(--c4);
+}
+.cor-3 {
+  color: var(--c3);
+}
+.cor-2 {
+  color: var(--c2);
+}
+.cor-1 {
+  color: var(--c1);
+}
+.cor-w {
+  color: var(--w);
+}
+.cor-p-2 {
+  color: var(--p2);
+}
+.cor-p-1 {
+  color: var(--p1);
+}
+.font-grande {
+  font-family: "Poppins";
+  font-weight: 600;
+  font-size: 4rem;
+  line-height: 1.12;
+}
+.font-media {
+  font-family: "Poppins";
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1.25;
+}
+.font-pequena {
+  font-family: "Poppins";
+  font-weight: 400;
+  font-size: 1.125rem;
+}
+.font-detalhe {
+  font-family: "Poppins";
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.33;
+}
+
+.font-paragrafo {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.33;
+}
+.font-paragrafo-2 {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.33;
+}
+.font-form {
+  font-family: "Poppins";
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.font-form-2 {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+/* Estilos responsivos para tablet */
+@media (max-width: 1024px) {
+  .font-grande {
+    font-size: 3rem;
+  }
+
+  .font-media {
+    font-size: 1.75rem;
+  }
+
+  .font-pequena {
+    font-size: 1rem;
+  }
+
+  .font-detalhe {
+    font-size: 1.25rem;
+  }
+
+  .font-paragrafo {
+    font-size: 1.25rem;
+  }
+}
+
+/* Estilos responsivos para mobile */
+@media (max-width: 768px) {
+  :root {
+    --tamanho: 130px;
+  }
+  .font-grande {
+    font-size: 2.5rem;
+  }
+
+  .font-media {
+    font-size: 1.5rem;
+  }
+
+  .font-pequena {
+    font-size: 0.875rem;
+  }
+
+  .font-detalhe {
+    font-size: 0.85rem;
+  }
+
+  .font-paragrafo {
+    font-size: 1rem;
+  }
+}
+body {
+  margin: 0px;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+blockquote {
+  margin: 0px;
+  padding: 0px;
+}
+label {
+  display: block;
+}
+ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.container-2 {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
