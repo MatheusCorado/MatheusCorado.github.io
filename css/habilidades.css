@@ -1,0 +1,86 @@
+.habilidades-bg {
+  background-color: var(--c11);
+}
+.habilidades {
+  padding-top: 60px;
+  padding-bottom: 60px;
+  h1 {
+    padding-bottom: 60px;
+  }
+}
+.habilidades-lista {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 40px;
+}
+.barra {
+  display: grid;
+  .nome {
+    padding: 10px 20px;
+  }
+  .porcentagem {
+    text-align: right;
+    background: var(--c9);
+    padding: 10px 20px;
+  }
+}
+.html {
+  grid-template-columns: var(--tamanho) 9fr 1fr;
+  .nome {
+    background: #bd4b00;
+  }
+  .cor {
+    background: #e67e22;
+  }
+}
+.css {
+  grid-template-columns: var(--tamanho) 8fr 2fr;
+  .nome {
+    background: #2472a6;
+  }
+  .cor {
+    background: #3498db;
+  }
+}
+.javascript {
+  grid-template-columns: var(--tamanho) 3fr 7fr;
+  .nome {
+    background: #d5c100;
+  }
+  .cor {
+    background: #ffe723;
+  }
+}
+.git {
+  grid-template-columns: var(--tamanho) 2fr 8fr;
+  .nome {
+    background: #239c56;
+  }
+  .cor {
+    background: #2ecc71;
+  }
+}
+.uiux {
+  grid-template-columns: var(--tamanho) 4fr 6fr;
+  .nome {
+    background: #b8b8b8;
+  }
+  .cor {
+    background: #f0f0f0;
+  }
+}
+.python {
+  grid-template-columns: var(--tamanho) 5fr 5fr;
+  .nome {
+    background: #9c2323;
+  }
+  .cor {
+    background: #cc2e2e;
+  }
+}
+
+@media (max-width: 800px) {
+  .habilidades-lista {
+    grid-template-columns: 1fr;
+  }
+}
