@@ -1,0 +1,30 @@
+.projetos {
+  padding-top: 60px;
+  padding-bottom: 60px;
+  h1 {
+    padding-bottom: 60px;
+  }
+}
+.projetos-lista {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  padding-bottom: 20px;
+  overflow-x: auto;
+}
+.projetos-lista-item {
+  width: 360px;
+  background-color: var(--c1);
+  border: 2px solid var(--c1);
+  border-radius: 5px;
+  padding: 20px;
+  h2 {
+    padding-bottom: 10px;
+  }
+  p {
+    padding-bottom: 20px;
+  }
+}
+.projetos-lista-item:hover {
+  border: 2px solid var(--p1);
+}
