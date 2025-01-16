@@ -5,7 +5,7 @@
   padding-top: 60px;
   padding-bottom: 60px;
   h1 {
-    padding-bottom: 60px;
+    padding-bottom: 40px;
   }
 }
 .habilidades-lista {
@@ -82,5 +82,8 @@
 @media (max-width: 800px) {
   .habilidades-lista {
     grid-template-columns: 1fr;
+  }
+  .habilidades h1 {
+    padding-bottom: 20px;
   }
 }
