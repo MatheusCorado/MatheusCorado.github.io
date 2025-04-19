@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lista de Chá de Panela</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffeef2;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #d14f79;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .present-list {
+      list-style: none;
+      padding: 0;
+      max-width: 1000px;
+      margin: 20px auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* 4 colunas em computadores */
+      gap: 20px; /* espaçamento entre as colunas */
+    }
+    .present-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-transform: uppercase; /* Tornar o texto maiúsculo */
+      font-size: 14px;
+      justify-content: center;
+    }
+    .present-item:hover {
+      background: #fce4ec;
+    }
+    .present-item.selected {
+      background: #d14f79;
+      color: white;
+    }
+    .present-item.taken {
+      text-decoration: line-through;
+      background: #ccc;
+      color: #888;
+      cursor: not-allowed;
+    }
+
+    /* Estilos responsivos */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      input, button {
+        width: 100%;
+        font-size: 14px;
+      }
+
+      .present-list {
+        grid-template-columns: repeat(2, 1fr); /* 2 colunas para tablets */
+      }
+
+      .present-item {
+        font-size: 12px;
+        padding: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      input, button {
+        font-size: 12px;
+      }
+
+      .present-list {
+        grid-template-columns: 1fr; /* 1 coluna para celulares */
+      }
+
+      .present-item {
+        font-size: 12px;
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Lista de Chá de Panela</h1>
+  
+  <input type="text" id="guestName" placeholder="Digite seu nome">
+  <br>
+  <button onclick="confirmSelection()">Confirmar Presentes</button>
+  <button onclick="exportarLista()">Exportar Lista</button>
+  <button onclick="resetarLista()" style="background: red; color: white;">Resetar Lista (Admin)</button>
+
+  <ul class="present-list" id="presentList"></ul>
+
+  <script>
+    const presents = [
+      'liquidificador',
+      'sanduicheira',
+      'batedeira',
+      'chaleira eletrica',
+      'panela de pressão',
+      'airfryer',
+      'panela eletrica de arroz',
+      'jogo de panela',
+      'jode de pano de prato 2x',
+      'jogo de copo',
+      'jogo de copo',
+      'jogo de talher',
+      'jogo de prato',
+      'jogo de vasilhas',
+      'jogo de vasilhas',
+      'jarra de vidro',
+      'garrafa termica de café',
+      'escorredor de louça',
+      'jogo de xicara',
+      'jogo de travessa',
+      'foma de bolo',
+      'processador de alimento',
+      'ralador',
+      'tabua de madeira',
+      'jogo de taça',
+      'jogo de toalha',
+      'jogo de toalha',
+      'pote hermeticos',
+      'pote hermeticos',
+      'jogo de cama (queen)',
+      'jogo de cama (queen)',
+      'tabua de passa roupa',
+      'varal de chão',
+      'cuscuzeira',
+      'fruteira'
+    ];
+
+    let selectedItems = [];
+    const presentList = document.getElementById("presentList");
+
+    function loadPresents() {
+      presentList.innerHTML = "";
+      const taken = JSON.parse(localStorage.getItem("takenPresents")) || {};
+
+      presents.forEach((present, index) => {
+        const key = `${present}_${index}`; // permite itens duplicados
+        const li = document.createElement("li");
+        li.classList.add("present-item");
+
+        const span = document.createElement("span");
+        span.textContent = present;
+
+        if (taken[key]) {
+          li.classList.add("taken");
+          li.title = `Escolhido por: ${taken[key]}`;
+        } else {
+          li.addEventListener("click", () => toggleSelect(li, key, present));
+        }
+
+        li.appendChild(span);
+        presentList.appendChild(li);
+      });
+    }
+
+    function toggleSelect(element, key, label) {
+      if (element.classList.contains("selected")) {
+        element.classList.remove("selected");
+        selectedItems = selectedItems.filter(i => i.key !== key);
+      } else {
+        element.classList.add("selected");
+        selectedItems.push({ key, label });
+      }
+    }
+
+    function confirmSelection() {
+      const name = document.getElementById("guestName").value.trim();
+      if (!name) return alert("Digite seu nome!");
+      if (selectedItems.length === 0) return alert("Escolha pelo menos um presente!");
+
+      const taken = JSON.parse(localStorage.getItem("takenPresents")) || {};
+
+      selectedItems.forEach(({ key }) => {
+        taken[key] = name;
+      });
+
+      localStorage.setItem("takenPresents", JSON.stringify(taken));
+      selectedItems = [];
+      loadPresents();
+      document.getElementById("guestName").value = "";
+      alert("Presentes confirmados! Obrigado 🥰");
+    }
+
+    function exportarLista() {
+      const taken = JSON.parse(localStorage.getItem("takenPresents")) || {};
+      if (Object.keys(taken).length === 0) {
+        alert("Nenhum presente foi escolhido ainda.");
+        return;
+      }
+
+      let texto = "🎁 Lista de Presentes Escolhidos:\n\n";
+      for (const [key, nome] of Object.entries(taken)) {
+        const item = key.replace(/_\d+$/, ''); // remove índice
+        texto += `- ${item} → ${nome}\n`;
+      }
+
+      const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "lista_cha_de_panela.txt";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function resetarLista() {
+      const senha = prompt("Digite a senha para resetar:");
+      if (senha === "admin123") {
+        localStorage.removeItem("takenPresents");
+        loadPresents();
+        alert("Lista resetada com sucesso!");
+      } else {
+        alert("Senha incorreta!");
+      }
+    }
+
+    loadPresents();
+  </script>
+</body>
+</html>
