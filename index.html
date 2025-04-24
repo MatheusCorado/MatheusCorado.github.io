@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lista de Chá de Panela</title>
   <style>
     body {
@@ -11,25 +12,30 @@
       padding: 20px;
       text-align: center;
     }
+
     h1 {
       color: #d14f79;
     }
-    input, button {
+
+    input,
+    button {
       padding: 10px;
       margin: 10px 5px;
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 16px;
     }
+
     .present-list {
-      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
       padding: 0;
       max-width: 1000px;
       margin: 20px auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 4 colunas em computadores */
-      gap: 20px; /* espaçamento entre as colunas */
+      list-style: none;
     }
+
     .present-item {
       display: flex;
       align-items: center;
@@ -39,17 +45,19 @@
       border-radius: 10px;
       cursor: pointer;
       transition: 0.2s;
-      text-transform: uppercase; /* Tornar o texto maiúsculo */
-      font-size: 14px;
-      justify-content: center;
+      font-weight: bold;
+      text-transform: uppercase;
     }
+
     .present-item:hover {
       background: #fce4ec;
     }
+
     .present-item.selected {
       background: #d14f79;
       color: white;
     }
+
     .present-item.taken {
       text-decoration: line-through;
       background: #ccc;
@@ -57,50 +65,23 @@
       cursor: not-allowed;
     }
 
-    /* Estilos responsivos */
     @media (max-width: 768px) {
-      h1 {
-        font-size: 24px;
-      }
-
-      input, button {
-        width: 100%;
-        font-size: 14px;
-      }
-
       .present-list {
-        grid-template-columns: repeat(2, 1fr); /* 2 colunas para tablets */
-      }
-
-      .present-item {
-        font-size: 12px;
-        padding: 10px;
+        grid-template-columns: 1fr 1fr;
       }
     }
 
     @media (max-width: 480px) {
-      h1 {
-        font-size: 20px;
-      }
-
-      input, button {
-        font-size: 12px;
-      }
-
       .present-list {
-        grid-template-columns: 1fr; /* 1 coluna para celulares */
-      }
-
-      .present-item {
-        font-size: 12px;
-        padding: 8px;
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
+
 <body>
   <h1>Lista de Chá de Panela</h1>
-  
+
   <input type="text" id="guestName" placeholder="Digite seu nome">
   <br>
   <button onclick="confirmSelection()">Confirmar Presentes</button>
@@ -109,59 +90,50 @@
 
   <ul class="present-list" id="presentList"></ul>
 
-  <script>
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyArPOq9puGaoJG2ikMtoK7tdqKs-_oSEhA",
+      authDomain: "cha-de-panela-3f175.firebaseapp.com",
+      projectId: "cha-de-panela-3f175",
+      storageBucket: "cha-de-panela-3f175.appspot.com",
+      messagingSenderId: "54919113387",
+      appId: "1:54919113387:web:f203e9dd320a73a0a665ee",
+      measurementId: "G-YK68T4LH19",
+      databaseURL: "https://cha-de-panela-3f175-default-rtdb.firebaseio.com/"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
     const presents = [
-      'liquidificador',
-      'sanduicheira',
-      'batedeira',
-      'chaleira eletrica',
-      'panela de pressão',
-      'airfryer',
-      'panela eletrica de arroz',
-      'jogo de panela',
-      'jode de pano de prato 2x',
-      'jogo de copo',
-      'jogo de copo',
-      'jogo de talher',
-      'jogo de prato',
-      'jogo de vasilhas',
-      'jogo de vasilhas',
-      'jarra de vidro',
-      'garrafa termica de café',
-      'escorredor de louça',
-      'jogo de xicara',
-      'jogo de travessa',
-      'foma de bolo',
-      'processador de alimento',
-      'ralador',
-      'tabua de madeira',
-      'jogo de taça',
-      'jogo de toalha',
-      'jogo de toalha',
-      'pote hermeticos',
-      'pote hermeticos',
-      'jogo de cama (queen)',
-      'jogo de cama (queen)',
-      'tabua de passa roupa',
-      'varal de chão',
-      'cuscuzeira',
-      'fruteira'
+      'liquidificador', 'sanduicheira', 'batedeira', 'chaleira eletrica', 'panela de pressão',
+      'airfryer', 'panela eletrica de arroz', 'jogo de panela', 'jode de pano de prato 2x',
+      'jogo de copo', 'jogo de copo', 'jogo de talher', 'jogo de prato', 'jogo de vasilhas',
+      'jogo de vasilhas', 'jarra de vidro', 'garrafa termica de café', 'escorredor de louça',
+      'jogo de xicara', 'jogo de travessa', 'foma de bolo', 'processador de alimento',
+      'ralador', 'tabua de madeira', 'jogo de taça', 'jogo de toalha', 'jogo de toalha',
+      'pote hermeticos', 'pote hermeticos', 'jogo de cama (queen)', 'jogo de cama (queen)',
+      'tabua de passa roupa', 'varal de chão', 'cuscuzeira'
     ];
 
     let selectedItems = [];
     const presentList = document.getElementById("presentList");
 
-    function loadPresents() {
+    async function loadPresents() {
       presentList.innerHTML = "";
-      const taken = JSON.parse(localStorage.getItem("takenPresents")) || {};
+      const dbRef = ref(db);
+      const snapshot = await get(child(dbRef, `takenPresents`));
+      const taken = snapshot.exists() ? snapshot.val() : {};
 
       presents.forEach((present, index) => {
-        const key = `${present}_${index}`; // permite itens duplicados
+        const key = `${present}_${index}`;
         const li = document.createElement("li");
         li.classList.add("present-item");
-
-        const span = document.createElement("span");
-        span.textContent = present;
+        li.textContent = present.toUpperCase();
 
         if (taken[key]) {
           li.classList.add("taken");
@@ -170,7 +142,6 @@
           li.addEventListener("click", () => toggleSelect(li, key, present));
         }
 
-        li.appendChild(span);
         presentList.appendChild(li);
       });
     }
@@ -185,26 +156,30 @@
       }
     }
 
-    function confirmSelection() {
+    async function confirmSelection() {
       const name = document.getElementById("guestName").value.trim();
       if (!name) return alert("Digite seu nome!");
       if (selectedItems.length === 0) return alert("Escolha pelo menos um presente!");
 
-      const taken = JSON.parse(localStorage.getItem("takenPresents")) || {};
-
+      const updates = {};
       selectedItems.forEach(({ key }) => {
-        taken[key] = name;
+        updates[key] = name;
       });
 
-      localStorage.setItem("takenPresents", JSON.stringify(taken));
+      await set(ref(db, "takenPresents"), {
+        ...(await (await get(ref(db, "takenPresents"))).val() || {}),
+        ...updates
+      });
+
       selectedItems = [];
       loadPresents();
       document.getElementById("guestName").value = "";
       alert("Presentes confirmados! Obrigado 🥰");
     }
 
-    function exportarLista() {
-      const taken = JSON.parse(localStorage.getItem("takenPresents")) || {};
+    async function exportarLista() {
+      const snapshot = await get(ref(db, "takenPresents"));
+      const taken = snapshot.exists() ? snapshot.val() : {};
       if (Object.keys(taken).length === 0) {
         alert("Nenhum presente foi escolhido ainda.");
         return;
@@ -212,8 +187,8 @@
 
       let texto = "🎁 Lista de Presentes Escolhidos:\n\n";
       for (const [key, nome] of Object.entries(taken)) {
-        const item = key.replace(/_\d+$/, ''); // remove índice
-        texto += `- ${item} → ${nome}\n`;
+        const item = key.replace(/_\d+$/, '');
+        texto += `- ${item.toUpperCase()} → ${nome}\n`;
       }
 
       const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
@@ -226,10 +201,10 @@
       URL.revokeObjectURL(url);
     }
 
-    function resetarLista() {
+    async function resetarLista() {
       const senha = prompt("Digite a senha para resetar:");
       if (senha === "admin123") {
-        localStorage.removeItem("takenPresents");
+        await set(ref(db, "takenPresents"), {});
         loadPresents();
         alert("Lista resetada com sucesso!");
       } else {
@@ -240,4 +215,5 @@
     loadPresents();
   </script>
 </body>
+
 </html>
