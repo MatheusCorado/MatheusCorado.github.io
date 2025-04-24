@@ -79,6 +79,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
     import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
+    // Configuração do Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyArPOq9puGaoJG2ikMtoK7tdqKs-_oSEhA",
       authDomain: "cha-de-panela-3f175.firebaseapp.com",
@@ -89,123 +90,128 @@
       measurementId: "G-YK68T4LH19"
     };
 
+    // Inicializando o Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Lista de presentes
     const presents = [
-      'LIQUIDIFICADOR', 'SANDUICHEIRA', 'BATEDEIRA', 'CHALEIRA ELETRICA', 'PANELA DE PRESSÃO',
-      'AIRFRYER', 'PANELA ELETRICA DE ARROZ', 'JOGO DE PANELA', 'JOGO DE PANO DE PRATO 2X',
-      'JOGO DE COPO', 'JOGO DE COPO', 'JOGO DE TALHER', 'JOGO DE PRATO', 'JOGO DE VASILHAS',
-      'JOGO DE VASILHAS', 'JARRA DE VIDRO', 'GARROTA TERMICA DE CAFÉ', 'ESCORREDOR DE LOUÇA',
-      'JOGO DE XICARA', 'JOGO DE TRAVESSA', 'FORMA DE BOLO', 'PROCESSADOR DE ALIMENTO', 'RALADOR',
-      'TABUA DE MADEIRA', 'JOGO DE TAÇA', 'JOGO DE TOALHA', 'JOGO DE TOALHA', 'POTE HERMETICOS',
-      'POTE HERMETICOS', 'JOGO DE CAMA (QUEEN)', 'JOGO DE CAMA (QUEEN)', 'TABUA DE PASSA ROUPA',
-      'VARAL DE CHÃO', 'CUSCUZEIRA'
+      'liquidificador',
+      'sanduicheira',
+      'batedeira',
+      'chaleira eletrica',
+      'panela de pressão',
+      'airfryer',
+      'panela eletrica de arroz',
+      'jogo de panela',
+      'jogo de copo',
+      'jogo de talher',
+      'jogo de prato',
+      'jogo de vasilhas',
+      'jarra de vidro',
+      'garrafa termica de café',
+      'escorredor de louça',
+      'jogo de xicara',
+      'foma de bolo',
+      'processador de alimento',
+      'ralador',
+      'tabua de madeira',
+      'jogo de taça',
+      'jogo de toalha',
+      'pote hermeticos',
+      'jogo de cama (queen)',
+      'tabua de passa roupa',
+      'varal de chão',
+      'cuscuzeira'
     ];
 
+    // Elemento da lista de presentes
     const presentList = document.getElementById("presentList");
 
-    // Atualiza a lista de presentes na UI
-    function loadPresents(taken) {
-      presentList.innerHTML = "";
-      presents.forEach((present, index) => {
-        const li = document.createElement("li");
-        li.classList.add("present-item");
+    // Função para carregar os presentes da Firebase
+    function loadPresents() {
+      const presentsRef = collection(db, "presents");
+      onSnapshot(presentsRef, (snapshot) => {
+        presentList.innerHTML = "";
+        snapshot.forEach(doc => {
+          const presentData = doc.data();
+          const li = document.createElement("li");
+          li.classList.add("present-item");
+          const span = document.createElement("span");
+          span.textContent = presentData.name;
 
-        const span = document.createElement("span");
-        span.textContent = present;
+          if (presentData.taken) {
+            li.classList.add("taken");
+            li.title = `Escolhido por: ${presentData.taken}`;
+          } else {
+            li.addEventListener("click", () => toggleSelect(li, doc.id, presentData.name));
+          }
 
-        if (taken[present]) {
-          li.classList.add("taken");
-          li.title = `Escolhido por: ${taken[present]}`;
-        } else {
-          li.addEventListener("click", () => toggleSelect(li, present));
-        }
-
-        li.appendChild(span);
-        presentList.appendChild(li);
+          li.appendChild(span);
+          presentList.appendChild(li);
+        });
       });
     }
 
-    let selectedItems = [];
+    // Função para alternar o status de seleção do presente
+    function toggleSelect(element, docId, label) {
+      const name = document.getElementById("guestName").value.trim();
+      if (!name) return alert("Digite seu nome!");
 
-    // Marcar/desmarcar presente
-    function toggleSelect(element, present) {
       if (element.classList.contains("selected")) {
         element.classList.remove("selected");
-        selectedItems = selectedItems.filter(item => item !== present);
+        setDoc(doc(db, "presents", docId), { taken: null }, { merge: true });
       } else {
         element.classList.add("selected");
-        selectedItems.push(present);
+        setDoc(doc(db, "presents", docId), { taken: name }, { merge: true });
       }
     }
 
-    // Confirmar seleção de presentes
-    async function confirmSelection() {
+    // Função para confirmar a seleção de presentes
+    function confirmSelection() {
       const name = document.getElementById("guestName").value.trim();
       if (!name) return alert("Digite seu nome!");
-      if (selectedItems.length === 0) return alert("Escolha pelo menos um presente!");
-
-      const takenRef = doc(db, "takenPresents", "presentList");
-      const docSnap = await getDoc(takenRef);
-      const taken = docSnap.exists() ? docSnap.data() : {};
-
-      selectedItems.forEach((item) => {
-        taken[item] = name;
-      });
-
-      await setDoc(takenRef, taken);
-      selectedItems = [];
-      loadPresents(taken);
-      document.getElementById("guestName").value = "";
       alert("Presentes confirmados! Obrigado 🥰");
     }
 
-    // Exportar lista de presentes
+    // Função para exportar a lista
     function exportarLista() {
-      const takenRef = doc(db, "takenPresents", "presentList");
-      getDoc(takenRef).then(docSnap => {
-        const taken = docSnap.data() || {};
-        if (Object.keys(taken).length === 0) {
-          alert("Nenhum presente foi escolhido ainda.");
-          return;
-        }
-
+      const taken = [];
+      const presentsRef = collection(db, "presents");
+      onSnapshot(presentsRef, (snapshot) => {
+        snapshot.forEach(doc => {
+          const presentData = doc.data();
+          if (presentData.taken) {
+            taken.push(`${presentData.name} → ${presentData.taken}`);
+          }
+        });
         let texto = "🎁 Lista de Presentes Escolhidos:\n\n";
-        for (const [item, nome] of Object.entries(taken)) {
-          texto += `- ${item} → ${nome}\n`;
-        }
-
+        texto += taken.join("\n");
         const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.href = url;
+        link.href = URL.createObjectURL(blob);
         link.download = "lista_cha_de_panela.txt";
         link.click();
-        URL.revokeObjectURL(url);
       });
     }
 
-    // Resetar lista (admin)
+    // Função para resetar a lista
     function resetarLista() {
       const senha = prompt("Digite a senha para resetar:");
       if (senha === "admin123") {
-        const takenRef = doc(db, "takenPresents", "presentList");
-        setDoc(takenRef, {});
+        const presentsRef = collection(db, "presents");
+        onSnapshot(presentsRef, (snapshot) => {
+          snapshot.forEach(doc => {
+            setDoc(doc.ref, { taken: null }, { merge: true });
+          });
+        });
         alert("Lista resetada com sucesso!");
       } else {
         alert("Senha incorreta!");
       }
     }
 
-    // Ouvir mudanças em tempo real
-    onSnapshot(doc(db, "takenPresents", "presentList"), (docSnap) => {
-      const taken = docSnap.data() || {};
-      loadPresents(taken);
-    });
-
-    // Inicialização
-    loadPresents({});
+    loadPresents();
   </script>
 </body>
 
