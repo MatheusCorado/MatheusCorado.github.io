@@ -27,26 +27,22 @@
     }
 
     .present-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px;
-      padding: 0;
-      max-width: 1000px;
-      margin: 20px auto;
       list-style: none;
+      padding: 0;
+      max-width: 500px;
+      margin: 20px auto;
     }
 
     .present-item {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       padding: 12px;
       background: white;
+      margin-bottom: 8px;
       border-radius: 10px;
       cursor: pointer;
       transition: 0.2s;
-      font-weight: bold;
-      text-transform: uppercase;
     }
 
     .present-item:hover {
@@ -63,18 +59,6 @@
       background: #ccc;
       color: #888;
       cursor: not-allowed;
-    }
-
-    @media (max-width: 768px) {
-      .present-list {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .present-list {
-        grid-template-columns: 1fr;
-      }
     }
   </style>
 </head>
@@ -93,126 +77,135 @@
   <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+    import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyArPOq9puGaoJG2ikMtoK7tdqKs-_oSEhA",
       authDomain: "cha-de-panela-3f175.firebaseapp.com",
       projectId: "cha-de-panela-3f175",
-      storageBucket: "cha-de-panela-3f175.appspot.com",
+      storageBucket: "cha-de-panela-3f175.firebasestorage.app",
       messagingSenderId: "54919113387",
       appId: "1:54919113387:web:f203e9dd320a73a0a665ee",
-      measurementId: "G-YK68T4LH19",
-      databaseURL: "https://cha-de-panela-3f175-default-rtdb.firebaseio.com/"
+      measurementId: "G-YK68T4LH19"
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    const db = getFirestore(app);
 
     const presents = [
-      'liquidificador', 'sanduicheira', 'batedeira', 'chaleira eletrica', 'panela de pressão',
-      'airfryer', 'panela eletrica de arroz', 'jogo de panela', 'jode de pano de prato 2x',
-      'jogo de copo', 'jogo de copo', 'jogo de talher', 'jogo de prato', 'jogo de vasilhas',
-      'jogo de vasilhas', 'jarra de vidro', 'garrafa termica de café', 'escorredor de louça',
-      'jogo de xicara', 'jogo de travessa', 'foma de bolo', 'processador de alimento',
-      'ralador', 'tabua de madeira', 'jogo de taça', 'jogo de toalha', 'jogo de toalha',
-      'pote hermeticos', 'pote hermeticos', 'jogo de cama (queen)', 'jogo de cama (queen)',
-      'tabua de passa roupa', 'varal de chão', 'cuscuzeira'
+      'LIQUIDIFICADOR', 'SANDUICHEIRA', 'BATEDEIRA', 'CHALEIRA ELETRICA', 'PANELA DE PRESSÃO',
+      'AIRFRYER', 'PANELA ELETRICA DE ARROZ', 'JOGO DE PANELA', 'JOGO DE PANO DE PRATO 2X',
+      'JOGO DE COPO', 'JOGO DE COPO', 'JOGO DE TALHER', 'JOGO DE PRATO', 'JOGO DE VASILHAS',
+      'JOGO DE VASILHAS', 'JARRA DE VIDRO', 'GARROTA TERMICA DE CAFÉ', 'ESCORREDOR DE LOUÇA',
+      'JOGO DE XICARA', 'JOGO DE TRAVESSA', 'FORMA DE BOLO', 'PROCESSADOR DE ALIMENTO', 'RALADOR',
+      'TABUA DE MADEIRA', 'JOGO DE TAÇA', 'JOGO DE TOALHA', 'JOGO DE TOALHA', 'POTE HERMETICOS',
+      'POTE HERMETICOS', 'JOGO DE CAMA (QUEEN)', 'JOGO DE CAMA (QUEEN)', 'TABUA DE PASSA ROUPA',
+      'VARAL DE CHÃO', 'CUSCUZEIRA'
     ];
 
-    let selectedItems = [];
     const presentList = document.getElementById("presentList");
 
-    async function loadPresents() {
+    // Atualiza a lista de presentes na UI
+    function loadPresents(taken) {
       presentList.innerHTML = "";
-      const dbRef = ref(db);
-      const snapshot = await get(child(dbRef, `takenPresents`));
-      const taken = snapshot.exists() ? snapshot.val() : {};
-
       presents.forEach((present, index) => {
-        const key = `${present}_${index}`;
         const li = document.createElement("li");
         li.classList.add("present-item");
-        li.textContent = present.toUpperCase();
 
-        if (taken[key]) {
+        const span = document.createElement("span");
+        span.textContent = present;
+
+        if (taken[present]) {
           li.classList.add("taken");
-          li.title = `Escolhido por: ${taken[key]}`;
+          li.title = `Escolhido por: ${taken[present]}`;
         } else {
-          li.addEventListener("click", () => toggleSelect(li, key, present));
+          li.addEventListener("click", () => toggleSelect(li, present));
         }
 
+        li.appendChild(span);
         presentList.appendChild(li);
       });
     }
 
-    function toggleSelect(element, key, label) {
+    let selectedItems = [];
+
+    // Marcar/desmarcar presente
+    function toggleSelect(element, present) {
       if (element.classList.contains("selected")) {
         element.classList.remove("selected");
-        selectedItems = selectedItems.filter(i => i.key !== key);
+        selectedItems = selectedItems.filter(item => item !== present);
       } else {
         element.classList.add("selected");
-        selectedItems.push({ key, label });
+        selectedItems.push(present);
       }
     }
 
+    // Confirmar seleção de presentes
     async function confirmSelection() {
       const name = document.getElementById("guestName").value.trim();
       if (!name) return alert("Digite seu nome!");
       if (selectedItems.length === 0) return alert("Escolha pelo menos um presente!");
 
-      const updates = {};
-      selectedItems.forEach(({ key }) => {
-        updates[key] = name;
+      const takenRef = doc(db, "takenPresents", "presentList");
+      const docSnap = await getDoc(takenRef);
+      const taken = docSnap.exists() ? docSnap.data() : {};
+
+      selectedItems.forEach((item) => {
+        taken[item] = name;
       });
 
-      await set(ref(db, "takenPresents"), {
-        ...(await (await get(ref(db, "takenPresents"))).val() || {}),
-        ...updates
-      });
-
+      await setDoc(takenRef, taken);
       selectedItems = [];
-      loadPresents();
+      loadPresents(taken);
       document.getElementById("guestName").value = "";
       alert("Presentes confirmados! Obrigado 🥰");
     }
 
-    async function exportarLista() {
-      const snapshot = await get(ref(db, "takenPresents"));
-      const taken = snapshot.exists() ? snapshot.val() : {};
-      if (Object.keys(taken).length === 0) {
-        alert("Nenhum presente foi escolhido ainda.");
-        return;
-      }
+    // Exportar lista de presentes
+    function exportarLista() {
+      const takenRef = doc(db, "takenPresents", "presentList");
+      getDoc(takenRef).then(docSnap => {
+        const taken = docSnap.data() || {};
+        if (Object.keys(taken).length === 0) {
+          alert("Nenhum presente foi escolhido ainda.");
+          return;
+        }
 
-      let texto = "🎁 Lista de Presentes Escolhidos:\n\n";
-      for (const [key, nome] of Object.entries(taken)) {
-        const item = key.replace(/_\d+$/, '');
-        texto += `- ${item.toUpperCase()} → ${nome}\n`;
-      }
+        let texto = "🎁 Lista de Presentes Escolhidos:\n\n";
+        for (const [item, nome] of Object.entries(taken)) {
+          texto += `- ${item} → ${nome}\n`;
+        }
 
-      const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "lista_cha_de_panela.txt";
-      link.click();
-      URL.revokeObjectURL(url);
+        const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "lista_cha_de_panela.txt";
+        link.click();
+        URL.revokeObjectURL(url);
+      });
     }
 
-    async function resetarLista() {
+    // Resetar lista (admin)
+    function resetarLista() {
       const senha = prompt("Digite a senha para resetar:");
       if (senha === "admin123") {
-        await set(ref(db, "takenPresents"), {});
-        loadPresents();
+        const takenRef = doc(db, "takenPresents", "presentList");
+        setDoc(takenRef, {});
         alert("Lista resetada com sucesso!");
       } else {
         alert("Senha incorreta!");
       }
     }
 
-    loadPresents();
+    // Ouvir mudanças em tempo real
+    onSnapshot(doc(db, "takenPresents", "presentList"), (docSnap) => {
+      const taken = docSnap.data() || {};
+      loadPresents(taken);
+    });
+
+    // Inicialização
+    loadPresents({});
   </script>
 </body>
 
