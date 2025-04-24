@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #ffeef2;
+      background: #d6f5fa;
       padding: 20px;
       text-align: center;
     }
@@ -125,18 +125,18 @@
       'cuscuzeira'
     ];
 
-    // Elemento da lista de presentes
-    const presentList = document.getElementById("presentList");
-
-    // Função para carregar os presentes da Firebase
+    // Função para carregar a lista de presentes
     function loadPresents() {
       const presentsRef = collection(db, "presents");
       onSnapshot(presentsRef, (snapshot) => {
-        presentList.innerHTML = "";
+        const presentList = document.getElementById("presentList");
+        presentList.innerHTML = "";  // Limpa a lista
+
         snapshot.forEach(doc => {
           const presentData = doc.data();
           const li = document.createElement("li");
           li.classList.add("present-item");
+
           const span = document.createElement("span");
           span.textContent = presentData.name;
 
@@ -153,7 +153,7 @@
       });
     }
 
-    // Função para alternar o status de seleção do presente
+    // Função para alternar a seleção de um item
     function toggleSelect(element, docId, label) {
       const name = document.getElementById("guestName").value.trim();
       if (!name) return alert("Digite seu nome!");
@@ -211,7 +211,7 @@
       }
     }
 
-    loadPresents();
+    loadPresents();  // Carregar os presentes ao carregar a página
   </script>
 </body>
 
