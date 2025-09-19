@@ -1,7 +1,11 @@
 body{
     margin: 0;
     background-color: #050011;
-    color: #C7F0FF;
+    font-family: "Fira Code", monospace;
+}
+img {
+    max-width: 100%;
+    display: block;
 }
 li,ul {
     list-style: none;
@@ -20,4 +24,8 @@ h1,h2,h3,h4,p {
   font-family: "Fira Code", monospace;
     font-size: 20px;
   font-weight: 700;
+}
+.container{
+    max-width: 1440px;
+    margin: 0 auto;
 }

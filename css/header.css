@@ -1,9 +1,8 @@
 .header{
-    max-width: 1440px;
-    margin: 0 auto;
+    color: #c7f0ff;
     display: grid;
-    grid-template-columns: auto 1fr auto;
     padding: 60px 20px;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
 }
 .header-menu {
