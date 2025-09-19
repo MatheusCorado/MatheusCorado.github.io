@@ -58,6 +58,9 @@
 }
 
 @media (max-width: 1024px) {
+  .main{
+        background-color: #0AF7F6;
+  }
   .main-info h1 {
   font-size: 32px;
 }
@@ -67,6 +70,9 @@
  font-weight: 600;
 
 }
+.main-info{
+  padding: 20px 0;
+}
 .icons {
   gap: 10px;
 }
@@ -74,13 +80,11 @@
   width: 318px;
   height: 318px;
 }
-
 }
 @media (max-width: 768px) {
 
 .main {
   grid-template-columns: 1fr;
-    background-color: #0AF7F6;
 }
 .icon {
   width: 20px;

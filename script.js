@@ -50,3 +50,21 @@ atualizarLayout();
 
 // Atualiza ao redimensionar
 window.addEventListener("resize", atualizarLayout);
+const hamburger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+
+// Abrir/fechar menu ao clicar no hambúrguer
+hamburger.addEventListener('click', (e) => {
+    menu.classList.toggle('active');
+    hamburger.classList.toggle('active');
+    e.stopPropagation(); // impede o clique de "vazar" para o document
+});
+
+// Fechar menu ao clicar fora
+document.addEventListener('click', (e) => {
+    // se o menu está aberto e o clique NÃO foi no menu nem no hambúrguer
+    if(menu.classList.contains('active') && !menu.contains(e.target) && !hamburger.contains(e.target)){
+        menu.classList.remove('active');
+        hamburger.classList.remove('active');
+    }
+});
