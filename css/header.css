@@ -20,7 +20,7 @@
 .header-hamb span {
   display: block;
   height: 0.25rem;
-  background-color: #90E1FF;
+  background-color: #90e1ff;
   border-radius: 0.125rem;
   transition: 0.3s;
 }
@@ -30,7 +30,7 @@
   top: 3.75rem;
   right: 0;
   width: 11.25rem;
-  background-color: #90E1FF;
+  background-color: #90e1ff;
   border-radius: 0.5rem;
   overflow: hidden;
   opacity: 0;
@@ -55,7 +55,7 @@
 }
 
 .menu-dropdown ul li a:hover {
-  background-color: #00CFE8;
+  background-color: #00cfe8;
   color: #050011;
 }
 

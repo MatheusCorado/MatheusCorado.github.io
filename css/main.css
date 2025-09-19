@@ -1,5 +1,5 @@
 .main-bg {
-  background: linear-gradient(to right, #0AF7F6 50%, #050011 50%);
+  background: linear-gradient(to right, #0af7f6 50%, #050011 50%);
 }
 
 .main {
@@ -10,7 +10,7 @@
 }
 
 .main-info {
-  background-color: #0AF7F6;
+  background-color: #0af7f6;
   align-content: center;
 }
 
@@ -38,7 +38,8 @@
   align-content: center;
 }
 
-.direita, .esquerda {
+.direita,
+.esquerda {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -47,7 +48,7 @@
 
 .direita {
   left: 0;
-  background-color: #0AF7F6;
+  background-color: #0af7f6;
   border-top-right-radius: 3.125rem;
   border-bottom-right-radius: 3.125rem;
 }
@@ -66,9 +67,9 @@
   gap: 1.25rem;
 }
 
-@media (max-width: 64rem) {
+@media (max-width: 1024px) {
   .main {
-    background-color: #0AF7F6;
+    background-color: #0af7f6;
   }
 
   .main-info {
@@ -95,7 +96,7 @@
   }
 }
 
-@media (max-width: 48rem) {
+@media (max-width: 768px) {
   .main {
     grid-template-columns: 1fr;
   }
@@ -106,6 +107,7 @@
   }
 
   .main-info p {
+    max-width: 100%;
     margin-top: 0.625rem;
     grid-column: 1/-1;
     justify-self: center;
@@ -117,7 +119,7 @@
 
   .main-info {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
     align-items: center;
     padding: 1.25rem 0;
   }
@@ -132,16 +134,21 @@
   }
 }
 
-@media (max-width: 26.5625rem) {
+@media (max-width: 425px) {
   .main-info p {
     font-size: 0.75rem;
+    max-width: 100%;
   }
-
+  .icon {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
   .main-info h1 {
-    font-size: 1.25rem;
+    font-size: 1rem;
+    padding-bottom: 0;
   }
 
   .main-info h2 {
-    font-size: 1rem;
+    font-size: 0.65rem;
   }
 }
